@@ -1,7 +1,52 @@
 <?php
 
+    //connect to our database
     require_once('connection.php');
+    
+    //validate form data that is enter by user
+    function validateFormData($formdata) {
+            $formData = trim(stripslashes(htmlspecialchars($formData)));
+            return $formData;
+    }
 
+    if(isset ($_POST['login'])) {
+        
+       $formUser = validateFormData($_POST['username']);
+       $formPass = validateFormData($_POST['password']);
+        
+       // create query
+       $query = "SELECT username, email, password FROM users 
+                 WHERE username = '$formUser'";
+        
+       //store the results
+       $result = mysqli_query($conn, $query);
+       
+       // if an result was return
+       if(mysqli_num_query($result) > 0) {
+           while($row = mysqli_fetch_assoc($result)) {
+               $user    = $row['username'];
+               $email   = $row['email'];
+               $hashPass= $row['password'];
+           }
+           
+           if(password_verify($formPass, $hashPass)) {
+               // user provides correct login details
+               session_start();
+               
+               $_SESSION['loggedInUser']    = $user;
+               $_SESSION['loggedInEmail']   = $email;
+               
+               header("Location: profile.php");
+           }else{
+               $loginError = "<div class='alert alert-danger'> username and password combination is incorrect! Try again. </div>";
+           }
+       }else{
+           $loginError = "<div class='alert alert-danger'> No such user is found. Try again. <a class'close' data-dismiss='alert'> &times;</a></div>";
+       }
+        
+        mysqli_close($conn);
+        
+    }
 
 
 ?>
