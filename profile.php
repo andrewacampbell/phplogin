@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,8 +34,12 @@
 
     <div class="container">
     <h1>Profile Page</h1>
-     <p class="lead">Welcome<?php echo $_SESSION['loggedInUser'];?></p>
-      
+    <p class="lead">Welcome<?php echo $_SESSION['loggedInUser'];?></p>
+    
+    <p class="lead">Your email is<?php echo $_SESSION['loggedInEmail'];?></p>
+    
+    <p><a href="logout.php" class="btn btn-danger btn-sm">Log out</a></p>
+     
 
     </div> <!-- /container -->
 

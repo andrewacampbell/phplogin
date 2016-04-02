@@ -4,15 +4,18 @@
     require_once('connection.php');
     
     //validate form data that is enter by user
-    function validateFormData($formdata) {
+    function validateFormData($formData) {
             $formData = trim(stripslashes(htmlspecialchars($formData)));
             return $formData;
     }
 
-    if(isset ($_POST['login'])) {
-        
-       $formUser = validateFormData($_POST['username']);
-       $formPass = validateFormData($_POST['password']);
+    $password = password_hash("abc123", PASSWORD_DEFAULT);
+    echo $password;
+
+    $query1 = mysqli_query("INSERT INTO users 
+        username(id, username, password, email, signup_date, biography) 
+        VALUES(, 'faker', 'abc123', 'faker', 'faker@gmail.com', CURRENT_TIMESTAMP, 'we all wear masks.')");
+        mysqli_query($query1);
         
        // create query
        $query = "SELECT username, email, password FROM users 
@@ -22,7 +25,7 @@
        $result = mysqli_query($conn, $query);
        
        // if an result was return
-       if(mysqli_num_query($result) > 0) {
+       if(mysqli_num_rows($result) > 0) {
            while($row = mysqli_fetch_assoc($result)) {
                $user    = $row['username'];
                $email   = $row['email'];
@@ -41,13 +44,12 @@
                $loginError = "<div class='alert alert-danger'> username and password combination is incorrect! Try again. </div>";
            }
        }else{
-           $loginError = "<div class='alert alert-danger'> No such user is found. Try again. <a class'close' data-dismiss='alert'> &times;</a></div>";
+           $loginError = "<div class='alert alert-danger'> No such user is found. Try again.<a class'= close' data-dismiss='alert'>&times;</a></div>";
        }
         
         mysqli_close($conn);
         
     }
-
 
 ?>
 
@@ -84,25 +86,26 @@
 
     <div class="container">
 
-      <form class="form-signin" action="echo htmlspecialchars($_SERVER['PHP_SELF] ); ?>" 
+     <?php echo $loginError; ?>
+      <form class="form-signin" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] ); ?>" 
        method="post">
        
         <h2 class="form-signin-heading">Please sign in</h2>
         
         <label for="input-username" class="sr-only">User Name</label>
-        <input type="text" id="inputEmail" class="form-control" placeholder="User Name" required autofocus id="login-username" name="username">
+        <input type="text"  class="form-control" placeholder="User Name" autofocus id="login-username" name="username">
         
         <label for="input-password" class="sr-only">Password</label>
-        <input type="text" id="inputEmail" class="form-control" placeholder="Password" required autofocus id="login-password" name="password">
+        <input type="password"  class="form-control" placeholder="Password" autofocus id="login-password" name="password">
         
-        <button class="btn btn-lg btn-primary btn-block" type="submit" 
-        name="login">Sign in</button>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" name="login" />
       </form>
 
     </div> <!-- /container -->
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/jquery-2.2.2.min"></script>
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
