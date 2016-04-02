@@ -12,7 +12,7 @@
     }
 
     $passwordh = password_hash("123abc", PASSWORD_DEFAULT);
-    echo $passwordh;
+
 
     $query1 = "INSERT INTO users 
         (id,username, password, email, signup_date, biography) 
