@@ -2,6 +2,8 @@
 
     //connect to our database
     require_once('connection.php');
+    global $loginError;
+    
     
     //validate form data that is enter by user
     function validateFormData($formData) {
@@ -9,14 +11,20 @@
             return $formData;
     }
 
-    $password = password_hash("abc123", PASSWORD_DEFAULT);
-    echo $password;
+    $passwordh = password_hash("123abc", PASSWORD_DEFAULT);
+    echo $passwordh;
 
-    $query1 = mysqli_query("INSERT INTO users 
-        username(id, username, password, email, signup_date, biography) 
-        VALUES(, 'faker', 'abc123', 'faker', 'faker@gmail.com', CURRENT_TIMESTAMP, 'we all wear masks.')");
-        mysqli_query($query1);
+    $query1 = "INSERT INTO users 
+        (id,username, password, email, signup_date, biography) 
+        VALUES(null,'john','$passwordh', 'john@gmail.com', CURRENT_TIMESTAMP, 'we all love rock and roll.')";
+      
+
+    if(isset($_POST['login'])) {
         
+   
+        $formUser = validateFormData($_POST['username']);
+        $formPass = validateFormData($_POST['password']);
+
        // create query
        $query = "SELECT username, email, password FROM users 
                  WHERE username = '$formUser'";
@@ -40,7 +48,7 @@
                $_SESSION['loggedInEmail']   = $email;
                
                header("Location: profile.php");
-           }else{
+           } else {
                $loginError = "<div class='alert alert-danger'> username and password combination is incorrect! Try again. </div>";
            }
        }else{
@@ -48,8 +56,7 @@
        }
         
         mysqli_close($conn);
-        
-    }
+     }
 
 ?>
 
@@ -83,7 +90,15 @@
   </head>
  
   <body>
-
+    
+    <?php 
+      
+//       if(mysqli_query($conn,$query1)){
+//           echo "Inserted";
+//       }else{
+//           echo "Not inserted".mysqli_error($conn);
+//       }
+      ?>
     <div class="container">
 
      <?php echo $loginError; ?>
@@ -106,6 +121,7 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/jquery-2.2.2.min"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
