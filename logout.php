@@ -8,7 +8,7 @@ if(isset($_COOKIE[session_name()])){
 session_unset();
 
 session_destroy();
-
+ 
 echo "You logged out! Please come again!.<br>";
 
 echo "<p><a href='login.php'>Log back in here</a></p>";
